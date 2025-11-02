@@ -41,11 +41,10 @@ def fetch_klines_range(client: BinanceClient, symbol: str, interval: str,
     first_write = not out_path.exists()
     total_candles = 0
     
-    print(f"\n{'='*80}")
-    print(f"📥 Thu thập dữ liệu: {symbol} - {interval}")
-    print(f"⏰ Từ: {datetime.fromtimestamp(start_ms/1000).strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"⏰ Đến: {datetime.fromtimestamp(end_ms/1000).strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"💾 File: {out_path}")
+    print(f"Thu thập dữ liệu: {symbol} - {interval}")
+    print(f"Từ: {datetime.fromtimestamp(start_ms/1000).strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Đến: {datetime.fromtimestamp(end_ms/1000).strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"File: {out_path}")
     print(f"{'='*80}")
     
     with out_path.open("a", newline="", encoding="utf-8") as f:
@@ -105,7 +104,7 @@ def fetch_klines_range(client: BinanceClient, symbol: str, interval: str,
             # Tránh rate limit
             time.sleep(config.RATE_LIMIT_DELAY)
     
-    print(f"\n✅ Hoàn thành: {total_candles} nến được lưu vào {out_path.name}")
+    print(f"\nHoàn thành: {total_candles} nến được lưu vào {out_path.name}")
     return total_candles
 
 
@@ -113,13 +112,13 @@ def main():
     """Thu thập dữ liệu lịch sử cho tất cả các cặp tiền"""
     
     print("\n" + "="*80)
-    print("🚀 BẮT ĐẦU THU THẬP DỮ LIỆU LỊCH SỬ")
+    print("BẮT ĐẦU THU THẬP DỮ LIỆU LỊCH SỬ")
     print("="*80)
     
     # Khởi tạo client
     client = BinanceClient()
     if not client.test_connection():
-        print("❌ Không thể kết nối Binance API. Vui lòng kiểm tra lại!")
+        print("Không thể kết nối Binance API. Vui lòng kiểm tra lại!")
         return
     
     now = datetime.now(timezone.utc)
@@ -136,8 +135,8 @@ def main():
     
     # 1) Thu thập dữ liệu khung 5 PHÚT (6 tháng ≈ 182 ngày)
     print("\n" + "🔹"*40)
-    print("📊 PHẦN 1: THU THẬP DỮ LIỆU KHUNG 5 PHÚT (6 THÁNG)")
-    print("🔹"*40)
+    print("PHẦN 1: THU THẬP DỮ LIỆU KHUNG 5 PHÚT (6 THÁNG)")
+    print(""*40)
     
     start_5m = now - timedelta(days=182)
     
@@ -174,21 +173,21 @@ def main():
     
     # Hiển thị tổng kết
     print("\n" + "="*80)
-    print("✅ HOÀN THÀNH THU THẬP DỮ LIỆU")
+    print("HOÀN THÀNH THU THẬP DỮ LIỆU")
     print("="*80)
-    print("\n📊 TỔNG KẾT:")
-    print("\n🕐 Khung 5 phút (6 tháng):")
+    print("\nTỔNG KẾT:")
+    print("\nKhung 5 phút (6 tháng):")
     for symbol, count in total_stats['5m'].items():
         print(f"  • {symbol}: {count:,} nến")
     
-    print("\n📅 Khung 1 ngày (3 năm):")
+    print("\nKhung 1 ngày (3 năm):")
     for symbol, count in total_stats['1d'].items():
         print(f"  • {symbol}: {count:,} nến")
     
     total_5m = sum(total_stats['5m'].values())
     total_1d = sum(total_stats['1d'].values())
-    print(f"\n🎯 TỔNG CỘNG: {total_5m + total_1d:,} nến")
-    print(f"\n💾 Dữ liệu đã lưu tại: {out_dir}")
+    print(f"\nTỔNG CỘNG: {total_5m + total_1d:,} nến")
+    print(f"\nDữ liệu đã lưu tại: {out_dir}")
     print("="*80 + "\n")
 
 
@@ -196,8 +195,8 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n⚠️  Thu thập dữ liệu bị dừng bởi người dùng")
+        print("\n\nThu thập dữ liệu bị dừng bởi người dùng")
     except Exception as e:
-        print(f"\n❌ Lỗi: {e}")
+        print(f"\nLỗi: {e}")
         import traceback
         traceback.print_exc()

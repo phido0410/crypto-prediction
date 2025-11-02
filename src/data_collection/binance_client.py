@@ -23,9 +23,9 @@ class BinanceClient:
                 api_key=config.BINANCE_API_KEY,
                 api_secret=config.BINANCE_API_SECRET
             )
-            print("✅ Kết nối Binance API thành công")
+            print("Kết nối Binance API thành công")
         except Exception as e:
-            print(f"❌ Lỗi kết nối Binance API: {e}")
+            print(f"Lỗi kết nối Binance API: {e}")
             self.client = None
     
     def get_realtime_price(self, symbol):
@@ -53,10 +53,10 @@ class BinanceClient:
             }
         
         except BinanceAPIException as e:
-            print(f"❌ Lỗi API Binance: {e}")
+            print(f"Lỗi API Binance: {e}")
             return None
         except Exception as e:
-            print(f"❌ Lỗi không xác định: {e}")
+            print(f"Lỗi không xác định: {e}")
             return None
     
     def get_klines(self, symbol, interval, limit=500, start_time=None, end_time=None):
@@ -105,10 +105,10 @@ class BinanceClient:
             return formatted_klines
         
         except BinanceAPIException as e:
-            print(f"❌ Lỗi API Binance: {e}")
+            print(f"Lỗi API Binance: {e}")
             return None
         except Exception as e:
-            print(f"❌ Error getting klines for {symbol}: {e}")
+            print(f"Error getting klines for {symbol}: {e}")
             return None
     
     def test_connection(self):
@@ -131,8 +131,8 @@ if __name__ == "__main__":
         # Test lấy giá realtime
         btc_price = client.get_realtime_price("BTCUSDT")
         if btc_price:
-            print(f"\n📊 BTC Price: ${btc_price['price']:,.2f}")
-            print(f"📈 24h Change: {btc_price['price_change_percent_24h']:+.2f}%")
+            print(f"\nBTC Price: ${btc_price['price']:,.2f}")
+            print(f"24h Change: {btc_price['price_change_percent_24h']:+.2f}%")
         
         # Test lấy klines
         print("\n📊 Testing klines (last 5 candles):")

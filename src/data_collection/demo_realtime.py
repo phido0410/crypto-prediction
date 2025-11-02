@@ -25,7 +25,7 @@ def display_realtime_prices(interval=5, duration=60):
     client = BinanceClient()
     
     print("=" * 80)
-    print("📊 CRYPTO REALTIME PRICE MONITOR")
+    print("CRYPTO REALTIME PRICE MONITOR")
     print("=" * 80)
     print(f"Updating every {interval} seconds for {duration} seconds...")
     print(f"Monitoring: {', '.join(config.PAIRS)}")
