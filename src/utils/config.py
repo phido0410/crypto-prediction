@@ -29,7 +29,10 @@ class Config:
     # Đường dẫn lưu dữ liệu
     DATA_DIR = PROJECT_ROOT / 'data'
     RAW_DATA_DIR = DATA_DIR / 'raw'
-    PROCESSED_DATA_DIR = DATA_DIR / 'processed'
+    PROCESSED_DATA_DIR = DATA_DIR / "processed"
+    MODELS_DIR = PROJECT_ROOT / "models"
+    PLOTS_DIR = PROJECT_ROOT / "plots"  # ← THÊM DÒNG NÀY
+    LOGS_DIR = PROJECT_ROOT / "logs"
     
     # Tạo các thư mục nếu chưa có
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
