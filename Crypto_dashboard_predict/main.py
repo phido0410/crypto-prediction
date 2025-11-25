@@ -1,4 +1,3 @@
-# main.py
 import os
 import asyncio
 from datetime import datetime, timezone
@@ -15,15 +14,15 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 
 
-# ================== PATH TỚI model_lstm ==================
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 base_path = os.path.join(BASE_DIR, "model_lstm")
 base_path = os.path.abspath(base_path)
 
-# ================== CẤU HÌNH CHUNG ==================
+
 SEQ_LEN = 30
 RSI_LENGTH = 14
-LOOKBACK_DAYS = 90  # đủ để tính RSI + pct_change + bỏ nến đang chạy
+LOOKBACK_DAYS = 90 
 
 API_KEY = os.getenv("BINANCE_API_KEY", "")
 API_SECRET = os.getenv("BINANCE_API_SECRET", "")
@@ -32,7 +31,7 @@ client = Client(API_KEY, API_SECRET)
 app = FastAPI(title="Crypto LSTM API")
 
 
-# ================== LSTM MODEL ==================
+
 class LSTMModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size, dropout=0.3):
         super(LSTMModel, self).__init__()
@@ -81,7 +80,7 @@ load_model_and_scaler("BTC")
 load_model_and_scaler("ETH")
 
 
-# ================== LẤY DỮ LIỆU OHLC ==================
+
 def get_ohlcv_from_binance(symbol: str, lookback_days=LOOKBACK_DAYS):
     klines = client.get_historical_klines(
         symbol,
@@ -114,7 +113,7 @@ def get_ohlcv_from_binance(symbol: str, lookback_days=LOOKBACK_DAYS):
     return df
 
 
-# ================== FEATURE ENGINEERING ==================
+
 def make_features(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df["rsi"] = ta.rsi(df["close"], length=RSI_LENGTH)
@@ -123,7 +122,7 @@ def make_features(df: pd.DataFrame) -> pd.DataFrame:
     return df[["open", "high", "low", "volume", "rsi", "pct_change"]]
 
 
-# ================== LẤY 30 NGÀY FEATURES ĐÃ ĐÓNG ==================
+
 def get_last_sequence_features(symbol: str):
     df_raw = get_ohlcv_from_binance(symbol)
     now_utc = datetime.now(timezone.utc)
@@ -150,7 +149,7 @@ def get_last_sequence_features(symbol: str):
     return feat_seq, last_time, pred_time
 
 
-# ================== SCHEMA ==================
+
 class PredictResponse(BaseModel):
     symbol: str
     predicted_price: float
@@ -159,7 +158,7 @@ class PredictResponse(BaseModel):
     predicted_time: str
 
 
-# ================== ENDPOINTS ==================
+
 @app.get("/")
 def root():
     return {"status": "OK"}
@@ -235,7 +234,7 @@ def predict(symbol: Literal["BTC", "ETH", "BTCUSDT", "ETHUSDT"]):
     )
 
 
-# ================== WS STREAMING ==================
+
 @app.websocket("/ws/price/{symbol}")
 async def websocket_price(websocket: WebSocket, symbol: str):
     await websocket.accept()
